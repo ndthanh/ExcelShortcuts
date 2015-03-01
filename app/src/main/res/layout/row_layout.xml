@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/shortcutButton1"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:background="#cccccc"
+        android:clickable="false"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+        android:paddingRight="7dp"
+        android:paddingLeft="7dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/shortcutButton2"
+        android:layout_alignTop="@+id/shortcutButton1"
+        android:layout_toRightOf="@+id/shortcutButton1"
+        android:layout_toEndOf="@+id/shortcutButton1"
+        android:layout_marginLeft="5dp"
+        android:layout_marginStart="30dp"
+        android:singleLine="false"
+        android:paddingLeft="7dp"
+        android:paddingTop="2dp"
+        android:paddingRight="7dp"
+        android:paddingBottom="2dp"
+        android:background="#cccccc" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:id="@+id/descriptionText"
+        android:layout_below="@+id/shortcutButton1"
+        android:layout_alignLeft="@+id/shortcutButton1"
+        android:layout_alignStart="@+id/shortcutButton1"
+        android:layout_marginTop="10dp"
+        android:maxWidth="320dp"
+        android:layout_marginBottom="10dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/shortcutButton3"
+        android:layout_alignTop="@+id/shortcutButton2"
+        android:layout_toRightOf="@+id/shortcutButton2"
+        android:layout_toEndOf="@+id/shortcutButton2"
+        android:layout_marginLeft="5dp"
+        android:layout_marginStart="30dp"
+        android:background="#cccccc"
+        android:paddingLeft="7dp"
+        android:paddingRight="7dp"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/shortcutButton4"
+        android:layout_alignTop="@+id/shortcutButton3"
+        android:layout_toRightOf="@+id/shortcutButton3"
+        android:layout_toEndOf="@+id/shortcutButton3"
+        android:paddingLeft="7dp"
+        android:paddingRight="7dp"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+        android:background="#cccccc"
+        android:layout_marginLeft="5dp" />
+
+</RelativeLayout>
