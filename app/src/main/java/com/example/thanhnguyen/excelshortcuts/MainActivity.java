@@ -64,9 +64,7 @@ public class MainActivity extends ActionBarActivity {
 
         searchBox.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -74,12 +72,11 @@ public class MainActivity extends ActionBarActivity {
                     ca.resetData();
                 }
                 ca.getFilter().filter(s.toString());
+
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
-
-            }
+            public void afterTextChanged(Editable s) {}
         });
 
         if (Build.VERSION.SDK_INT >= 11) {

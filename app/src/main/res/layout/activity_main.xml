@@ -7,5 +7,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/shortcutListView"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="10dp"/>
 </LinearLayout>

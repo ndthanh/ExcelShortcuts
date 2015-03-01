@@ -1,6 +1,12 @@
 package com.example.thanhnguyen.excelshortcuts;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.graphics.Color;
+import android.os.Build;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.BackgroundColorSpan;
 import android.widget.ArrayAdapter;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,6 +16,8 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.text.Normalizer;
 import java.util.ArrayList;
 
 public class CustomAdapter extends ArrayAdapter<Shortcut> implements Filterable {
@@ -102,6 +110,33 @@ public class CustomAdapter extends ArrayAdapter<Shortcut> implements Filterable 
         return v;
     }
 
+    @TargetApi(Build.VERSION_CODES.GINGERBREAD)
+    public static CharSequence highlight(String search, String originalText) {
+        // ignore case and accents
+        // the same thing should have been done for the search text
+        String normalizedText = Normalizer.normalize(originalText, Normalizer.Form.NFD).replaceAll("\\p{InCombiningDiacriticalMarks}+", "").toLowerCase();
+
+        int start = normalizedText.indexOf(search);
+        if (start < 0) {
+            // not found, nothing to to
+            return originalText;
+        } else {
+            // highlight each appearance in the original text
+            // while searching in normalized text
+            Spannable highlighted = new SpannableString(originalText);
+            while (start >= 0) {
+                int spanStart = Math.min(start, originalText.length());
+                int spanEnd = Math.min(start + search.length(), originalText.length());
+
+                highlighted.setSpan(new BackgroundColorSpan(Color.BLUE), spanStart, spanEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                start = normalizedText.indexOf(search, spanEnd);
+            }
+
+            return highlighted;
+        }
+    }
+
 
     /*
     *   Create the filter
@@ -117,6 +152,8 @@ public class CustomAdapter extends ArrayAdapter<Shortcut> implements Filterable 
     }
 
     private class ShortcutFilter extends Filter {
+        String stringSearch;
+        String originalString;
 
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
@@ -128,7 +165,9 @@ public class CustomAdapter extends ArrayAdapter<Shortcut> implements Filterable 
             } else {
                 ArrayList<Shortcut> mShortcutList = new ArrayList<Shortcut>();
                 for (Shortcut s : lshortcuts) {
-                    if (s.getDescription().toLowerCase().contains(constraint.toString().toLowerCase()) ||
+                    stringSearch = constraint.toString().toLowerCase();
+                    originalString = s.getDescription().toLowerCase();
+                    if (originalString .contains(stringSearch) ||
                         s.getShortcutButton1().toLowerCase().contains(constraint.toString().toLowerCase())){
 
                         mShortcutList.add(s);
