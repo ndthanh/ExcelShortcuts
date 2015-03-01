@@ -260,6 +260,8 @@ public class MyDBHandler extends SQLiteOpenHelper{
                 shortcut.setShortcutButton4(c.getString(4));
                 shortcut.setDescription(c.getString(5));
 
+
+
                 /* add shortcut to list */
                 shortcutList.add(shortcut);
             } while (c.moveToNext());

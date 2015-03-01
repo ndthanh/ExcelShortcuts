@@ -8,8 +8,11 @@ import android.support.v4.widget.SearchViewCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.ListView;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -17,6 +20,10 @@ import java.util.ArrayList;
 
 
 public class MainActivity extends ActionBarActivity {
+
+    ArrayList<Shortcut> shortcutList;
+    CustomAdapter ca;
+    EditText searchBox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,13 +44,12 @@ public class MainActivity extends ActionBarActivity {
 
         }
 
-        CustomAdapter ca;
-
-        ArrayList<Shortcut> shortcutList = db.getAllShortcuts();
+        shortcutList = db.getAllShortcuts();
 
         ListView shortcutListView = (ListView) findViewById(R.id.shortcutListView);
         ca = new CustomAdapter(this,0,shortcutList);
         shortcutListView.setAdapter(ca);
+
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -53,6 +59,29 @@ public class MainActivity extends ActionBarActivity {
 
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchView.setIconifiedByDefault(false);
+
+        int id = android.support.v7.appcompat.R.id.search_src_text;
+        searchBox = (EditText) searchView.findViewById(id);
+
+        searchBox.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (count < before ) {
+                    ca.resetData();
+                }
+                ca.getFilter().filter(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         if (Build.VERSION.SDK_INT >= 11) {
             SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
@@ -65,7 +94,6 @@ public class MainActivity extends ActionBarActivity {
         }
         return super.onCreateOptionsMenu(menu);
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

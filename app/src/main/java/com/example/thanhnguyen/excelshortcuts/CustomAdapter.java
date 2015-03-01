@@ -6,31 +6,46 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-public class CustomAdapter extends ArrayAdapter<Shortcut> {
+public class CustomAdapter extends ArrayAdapter<Shortcut> implements Filterable {
 
     private Activity activity;
     private ArrayList<Shortcut> lshortcuts;
+    private ArrayList<Shortcut> oriShortcuts;
     private static LayoutInflater mInflater = null;
+    private ShortcutFilter shortcutFilter;
 
     public CustomAdapter(Activity activity, int resource, ArrayList<Shortcut> _shortcuts) {
         super(activity, resource, _shortcuts);
         try {
             this.activity = activity;
             this.lshortcuts = _shortcuts;
+            this.oriShortcuts = _shortcuts;
 
             mInflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         } catch (Exception e) {}
+    }
+
+    public int getCount() {
+        return lshortcuts.size();
     }
 
     public Shortcut getItem(Shortcut position) {
         return position;
     }
 
-    public long getItemId( int position) {
-        return position;
+    public long getItemId(int position) {
+        return lshortcuts.get(position).hashCode();
+    }
+
+    public void resetData() {
+        lshortcuts = oriShortcuts;
     }
     public static class ViewHolder {
         public TextView shortcutButton1;
@@ -87,4 +102,52 @@ public class CustomAdapter extends ArrayAdapter<Shortcut> {
 
         return v;
     }
-}
+
+
+    /*
+    *   Create the filter
+    *
+    * */
+
+    @Override
+    public Filter getFilter() {
+        if (shortcutFilter == null) {
+            shortcutFilter = new ShortcutFilter();
+        }
+        return shortcutFilter;
+    }
+
+    private class ShortcutFilter extends Filter {
+
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            FilterResults results = new FilterResults();
+
+            if(constraint == null || constraint.length() == 0) {
+                results.values = oriShortcuts;
+                results.count = oriShortcuts.size();
+            } else {
+                ArrayList<Shortcut> mShortcutList = new ArrayList<Shortcut>();
+                for (Shortcut s : lshortcuts) {
+                    if (s.getDescription().toLowerCase().contains(constraint.toString().toLowerCase())) {
+                        mShortcutList.add(s);
+                    }
+                }
+                results.values = mShortcutList;
+                results.count = mShortcutList.size();
+            }
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            if(results.count == 0)
+                notifyDataSetInvalidated();
+            else {
+                lshortcuts = (ArrayList<Shortcut>) results.values;
+                notifyDataSetChanged();
+            }
+        }
+    }
+
+ }
