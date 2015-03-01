@@ -9,9 +9,8 @@ import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
+import android.widget.Toast;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class CustomAdapter extends ArrayAdapter<Shortcut> implements Filterable {
 
@@ -129,7 +128,9 @@ public class CustomAdapter extends ArrayAdapter<Shortcut> implements Filterable 
             } else {
                 ArrayList<Shortcut> mShortcutList = new ArrayList<Shortcut>();
                 for (Shortcut s : lshortcuts) {
-                    if (s.getDescription().toLowerCase().contains(constraint.toString().toLowerCase())) {
+                    if (s.getDescription().toLowerCase().contains(constraint.toString().toLowerCase()) ||
+                        s.getShortcutButton1().toLowerCase().contains(constraint.toString().toLowerCase())){
+
                         mShortcutList.add(s);
                     }
                 }
@@ -141,8 +142,10 @@ public class CustomAdapter extends ArrayAdapter<Shortcut> implements Filterable 
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-            if(results.count == 0)
+            if(results.count == 0) {
                 notifyDataSetInvalidated();
+                Toast.makeText(activity, "No result", Toast.LENGTH_SHORT).show();
+            }
             else {
                 lshortcuts = (ArrayList<Shortcut>) results.values;
                 notifyDataSetChanged();
