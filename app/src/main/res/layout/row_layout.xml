@@ -82,4 +82,17 @@
         android:background="@drawable/shortcut_button_background"
         android:layout_marginLeft="5dp" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="   Entering Data   "
+        android:id="@+id/categoryText"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/category_padding"
+        android:textColor="#ffffff"
+        android:textSize="12sp" />
+
 </RelativeLayout>

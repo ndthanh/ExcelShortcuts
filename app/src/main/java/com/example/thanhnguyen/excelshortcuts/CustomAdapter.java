@@ -17,8 +17,10 @@ import android.widget.Filterable;
 import android.widget.TextView;
 import java.text.Normalizer;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
-public class CustomAdapter extends ArrayAdapter<Shortcut> implements Filterable {
+public class CustomAdapter extends ArrayAdapter<Shortcut> implements Filterable, Comparator<Shortcut> {
 
     private Activity activity;
     private ArrayList<Shortcut> lshortcuts;
@@ -52,12 +54,46 @@ public class CustomAdapter extends ArrayAdapter<Shortcut> implements Filterable 
     public void resetData() {
         lshortcuts = oriShortcuts;
     }
+
+    @Override
+    public int compare(Shortcut lhs, Shortcut rhs) {
+        return 0;
+    }
+    public void sortByDescription(ArrayList<Shortcut> shortcutArrayList) {
+        Comparator<Shortcut> ShortcutComparatorByDescription = new Comparator<Shortcut>() {
+            @Override
+            public int compare(Shortcut lhs, Shortcut rhs) {
+                String descriptionShortcut1 = lhs.getDescription().toLowerCase();
+                String descriptionShortcut2 = rhs.getDescription().toLowerCase();
+
+                return descriptionShortcut1.compareTo(descriptionShortcut2);
+            }
+        };
+        Collections.sort(shortcutArrayList,ShortcutComparatorByDescription);
+        notifyDataSetChanged();
+    }
+
+    public void sortByCategory(ArrayList<Shortcut> shortcutArrayList) {
+        Comparator<Shortcut> ShortcutComparatorByCategory = new Comparator<Shortcut>() {
+            @Override
+            public int compare(Shortcut lhs, Shortcut rhs) {
+                String categoryShortcut1 = lhs.getCategory().toLowerCase();
+                String categoryShortcut2 = rhs.getCategory().toLowerCase();
+
+                return categoryShortcut1.compareTo(categoryShortcut2);
+            }
+        };
+        Collections.sort(shortcutArrayList,ShortcutComparatorByCategory);
+        notifyDataSetChanged();
+    }
+
     public static class ViewHolder {
         public TextView shortcutButton1;
         public TextView shortcutButton2;
         public TextView shortcutButton3;
         public TextView shortcutButton4;
         public TextView descriptionText;
+        public TextView categoryText;
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -73,6 +109,7 @@ public class CustomAdapter extends ArrayAdapter<Shortcut> implements Filterable 
                 holder.shortcutButton3 = (TextView) v.findViewById(R.id.shortcutButton3);
                 holder.shortcutButton4 = (TextView) v.findViewById(R.id.shortcutButton4);
                 holder.descriptionText= (TextView) v.findViewById(R.id.descriptionText);
+                holder.categoryText= (TextView) v.findViewById(R.id.categoryText);
                 v.setTag(holder);
 
             } else {
@@ -102,6 +139,7 @@ public class CustomAdapter extends ArrayAdapter<Shortcut> implements Filterable 
             }
 
             holder.descriptionText.setText(lshortcuts.get(position).getDescription());
+            holder.categoryText.setText(lshortcuts.get(position).getCategory());
 
         } catch (Exception e) {}
 
@@ -166,11 +204,13 @@ public class CustomAdapter extends ArrayAdapter<Shortcut> implements Filterable 
                 for (Shortcut s : lshortcuts) {
                     stringSearch = constraint.toString().toLowerCase();
                     originalString1 = (s.getDescription()
+                                   + s.getCategory()
                                    + s.getShortcutButton1() + "+"
                                    + s.getShortcutButton2() + "+"
                                    + s.getShortcutButton3() + "+"
                                    + s.getShortcutButton4()).toLowerCase();
                     originalString2 = (s.getDescription()
+                                + s.getCategory()
                                 + s.getShortcutButton1() + " "
                                 + s.getShortcutButton2() + " "
                                 + s.getShortcutButton3() + " "

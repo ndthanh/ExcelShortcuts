@@ -24,6 +24,7 @@ public class MyDBHandler extends SQLiteOpenHelper{
     private static final String COL_SHORTCUT_BUTTON_3 = "shortcutbutton3";
     private static final String COL_SHORTCUT_BUTTON_4 = "shortcutbutton4";
     private static final String COL_DESCRIPTION = "description";
+    private static final String COL_CATEGORY = "category";
 
     private String DATABASE_PATH = "data/data/"
             + "com.example.thanhnguyen.excelshortcuts"
@@ -125,7 +126,8 @@ public class MyDBHandler extends SQLiteOpenHelper{
                                                     ,COL_SHORTCUT_BUTTON_2
                                                     ,COL_SHORTCUT_BUTTON_3
                                                     ,COL_SHORTCUT_BUTTON_4
-                                                    ,COL_DESCRIPTION}, COL_ID + "=?",
+                                                    ,COL_DESCRIPTION
+                                                    ,COL_CATEGORY}, COL_ID + "=?",
                                              new String[] {String.valueOf(id)}, null, null, null, null);
         if (c != null)
             c.moveToFirst();
@@ -135,7 +137,8 @@ public class MyDBHandler extends SQLiteOpenHelper{
                                                          ,c.getString(2)
                                                          ,c.getString(3)
                                                          ,c.getString(4)
-                                                         ,c.getString(5));
+                                                         ,c.getString(5)
+                                                         ,c.getString(6));
         return shortcut;
     }
 
@@ -143,7 +146,7 @@ public class MyDBHandler extends SQLiteOpenHelper{
     public ArrayList<Shortcut> getAllShortcuts () {
         ArrayList<Shortcut> shortcutList = new ArrayList<Shortcut>();
 
-        String query = "SELECT * FROM " + TABLE_SHORTCUTS + " WHERE 1 ORDER BY description;";
+        String query = "SELECT * FROM " + TABLE_SHORTCUTS + ";";
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor c = db.rawQuery(query,null);
@@ -158,6 +161,7 @@ public class MyDBHandler extends SQLiteOpenHelper{
                 shortcut.setShortcutButton3(c.getString(3));
                 shortcut.setShortcutButton4(c.getString(4));
                 shortcut.setDescription(c.getString(5));
+                shortcut.setCategory(c.getString(6));
                 /* add shortcut to list */
                 shortcutList.add(shortcut);
             } while (c.moveToNext());

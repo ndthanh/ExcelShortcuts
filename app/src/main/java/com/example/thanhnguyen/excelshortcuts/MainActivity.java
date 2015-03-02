@@ -13,21 +13,18 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.SearchView;
-import android.widget.TextView;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class MainActivity extends Activity implements ViewTreeObserver.OnScrollChangedListener{
+public class MainActivity extends Activity{
 
     ArrayList<Shortcut> shortcutList;
     CustomAdapter ca;
@@ -66,7 +63,6 @@ public class MainActivity extends Activity implements ViewTreeObserver.OnScrollC
         shortcutList = db.getAllShortcuts();
 
         shortcutListView = (ListView) findViewById(R.id.shortcutListView);
-//        shortcutListView.getViewTreeObserver().addOnScrollChangedListener(this);
         shortcutListView.setOnScrollListener(new AbsListView.OnScrollListener() {
             private int mLastFirstVisibleItem;
             @Override
@@ -143,37 +139,17 @@ public class MainActivity extends Activity implements ViewTreeObserver.OnScrollC
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id) {
+            case R.id.action_settings:
+                return true;
+            case R.id.action_sort_by_description:
+                ca.sortByDescription(shortcutList);
+                return true;
+            case R.id.action_sort_by_category:
+                ca.sortByCategory(shortcutList);
+                return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
-/*    public int getScrollY() {
-        View c = shortcutListView.getChildAt(0);
-        if (c == null) {
-            return 0;
-        }
-        int firstVisiblePosition = shortcutListView.getFirstVisiblePosition();
-        int top = c.getTop();
-
-        return -top + firstVisiblePosition * c.getHeight();
-    }*/
-
-    @Override
-    public void onScrollChanged() {
-//        float y = ((ListView)findViewById(R.id.shortcutListView)).getFirstVisiblePosition();
-        /*float y = getScrollY();
-        Log.i(TAG, "scroll y = " + y);
-        Log.i(TAG, "mActionBarHeight =" + mActionBarHeight);
-        Log.i(TAG, "is Showing: " + mActionBar.isShowing());
-        if ( y >= mActionBarHeight && mActionBar.isShowing()) {
-            mActionBar.hide();
-            Log.i(TAG, "inside hide");
-        } else if (y == 0 && !mActionBar.isShowing()) {
-            mActionBar.show();
-            Log.i(TAG, "inside show");
-        }*/
-    }
 }

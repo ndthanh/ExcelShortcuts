@@ -18,13 +18,14 @@ public class Shortcut {
         this.description = description;
     }
 
-    public Shortcut(int _id, String shortcutButton1, String shortcutButton2, String shortcutButton3, String shortcutButton4, String description) {
+    public Shortcut(int _id, String shortcutButton1, String shortcutButton2, String shortcutButton3, String shortcutButton4, String description, String category) {
         this._id = _id;
         this.shortcutButton1 = shortcutButton1;
         this.shortcutButton2 = shortcutButton2;
         this.shortcutButton3 = shortcutButton3;
         this.shortcutButton4 = shortcutButton4;
         this.description = description;
+        this.category = category;
     }
 
     public int get_id() {
