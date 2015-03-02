@@ -3,7 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="?android:attr/actionBarSize"
+    android:paddingTop="10dp"
     >
 
     <ListView
@@ -13,6 +13,9 @@
         android:layout_weight="1"
         android:layout_marginRight="10dp"
         android:layout_marginLeft="10dp"
+        android:paddingTop="?android:attr/actionBarSize"
+        android:clipToPadding="false"
+        android:scrollbarStyle="outsideOverlay"
         android:divider="@android:color/transparent"
         android:dividerHeight="10dp"
         android:scrollbars="none"/>

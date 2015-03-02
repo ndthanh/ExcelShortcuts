@@ -9,13 +9,20 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.Window;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SearchView;
+import android.widget.TextView;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -27,6 +34,8 @@ public class MainActivity extends Activity implements ViewTreeObserver.OnScrollC
     EditText searchBox;
     private float mActionBarHeight;
     private ActionBar mActionBar;
+    private static final String TAG = "MainActivity";
+    ListView shortcutListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +65,37 @@ public class MainActivity extends Activity implements ViewTreeObserver.OnScrollC
 
         shortcutList = db.getAllShortcuts();
 
-        ListView shortcutListView = (ListView) findViewById(R.id.shortcutListView);
-        shortcutListView.getViewTreeObserver().addOnScrollChangedListener(this);
+        shortcutListView = (ListView) findViewById(R.id.shortcutListView);
+//        shortcutListView.getViewTreeObserver().addOnScrollChangedListener(this);
+        shortcutListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            private int mLastFirstVisibleItem;
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if(mLastFirstVisibleItem < firstVisibleItem) {
+                    Log.i(TAG,"Scrolling down");
+                    if (mActionBar.isShowing())
+                        mActionBar.hide();
+                }
+                if(mLastFirstVisibleItem>firstVisibleItem) {
+                    Log.i(TAG,"Scrolling up");
+                    if (!mActionBar.isShowing())
+                        mActionBar.show();
+                }
+                mLastFirstVisibleItem = firstVisibleItem;
+            }
+        });
+        shortcutListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                String shortcutItem = ((TextView) view.findViewById(R.id.descriptionText)).getText().toString();
+//                Log.i(TAG,"item cliked " + shortcutItem);
+            }
+        });
 
         ca = new CustomAdapter(this,0,shortcutList);
         shortcutListView.setAdapter(ca);
@@ -112,13 +150,30 @@ public class MainActivity extends Activity implements ViewTreeObserver.OnScrollC
         return super.onOptionsItemSelected(item);
     }
 
+/*    public int getScrollY() {
+        View c = shortcutListView.getChildAt(0);
+        if (c == null) {
+            return 0;
+        }
+        int firstVisiblePosition = shortcutListView.getFirstVisiblePosition();
+        int top = c.getTop();
+
+        return -top + firstVisiblePosition * c.getHeight();
+    }*/
+
     @Override
     public void onScrollChanged() {
-        float y = ((ListView)findViewById(R.id.shortcutListView)).getScrollY();
+//        float y = ((ListView)findViewById(R.id.shortcutListView)).getFirstVisiblePosition();
+        /*float y = getScrollY();
+        Log.i(TAG, "scroll y = " + y);
+        Log.i(TAG, "mActionBarHeight =" + mActionBarHeight);
+        Log.i(TAG, "is Showing: " + mActionBar.isShowing());
         if ( y >= mActionBarHeight && mActionBar.isShowing()) {
             mActionBar.hide();
+            Log.i(TAG, "inside hide");
         } else if (y == 0 && !mActionBar.isShowing()) {
             mActionBar.show();
-        }
+            Log.i(TAG, "inside show");
+        }*/
     }
 }
