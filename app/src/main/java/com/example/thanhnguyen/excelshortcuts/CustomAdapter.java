@@ -15,8 +15,6 @@ import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import java.text.Normalizer;
 import java.util.ArrayList;
 
@@ -153,7 +151,8 @@ public class CustomAdapter extends ArrayAdapter<Shortcut> implements Filterable 
 
     private class ShortcutFilter extends Filter {
         String stringSearch;
-        String originalString;
+        String originalString1;
+        String originalString2;
 
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
@@ -166,10 +165,17 @@ public class CustomAdapter extends ArrayAdapter<Shortcut> implements Filterable 
                 ArrayList<Shortcut> mShortcutList = new ArrayList<Shortcut>();
                 for (Shortcut s : lshortcuts) {
                     stringSearch = constraint.toString().toLowerCase();
-                    originalString = s.getDescription().toLowerCase();
-                    if (originalString .contains(stringSearch) ||
-                        s.getShortcutButton1().toLowerCase().contains(constraint.toString().toLowerCase())){
-
+                    originalString1 = (s.getDescription()
+                                   + s.getShortcutButton1() + "+"
+                                   + s.getShortcutButton2() + "+"
+                                   + s.getShortcutButton3() + "+"
+                                   + s.getShortcutButton4()).toLowerCase();
+                    originalString2 = (s.getDescription()
+                                + s.getShortcutButton1() + " "
+                                + s.getShortcutButton2() + " "
+                                + s.getShortcutButton3() + " "
+                                + s.getShortcutButton4()).toLowerCase();
+                    if (originalString1.contains(stringSearch) || originalString2.contains(stringSearch)){
                         mShortcutList.add(s);
                     }
                 }
@@ -183,7 +189,7 @@ public class CustomAdapter extends ArrayAdapter<Shortcut> implements Filterable 
         protected void publishResults(CharSequence constraint, FilterResults results) {
             if(results.count == 0) {
                 notifyDataSetInvalidated();
-                Toast.makeText(activity, "No result", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(activity, "No result", Toast.LENGTH_SHORT).show();
             }
             else {
                 lshortcuts = (ArrayList<Shortcut>) results.values;
